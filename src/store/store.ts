@@ -7,22 +7,28 @@ import { TodoService } from '@/service/todo.service';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+    // all mutation are handled inside mutation handlers in development
+    strict: process.env.NODE_ENV !== 'production',
     state: {
         todos: {},
         loading: false
     },
     getters: {
-        selectAll: (state: TodoState): Todo[] => {
+        selectTodos: (state: TodoState): Todo[] => {
             return Object.keys(state.todos).map(id => state.todos[id]);
         },
-        select: (state: TodoState) => (id: string): Todo => {
+        selectTodo: (state: TodoState) => (id: string): Todo => {
             return state.todos[id];
         },
         isLoading: (state: TodoState): boolean => {
             return state.loading;
         }
     },
+    // always do synchronous state changes here
     mutations: {
+        todosStartLoading: (state: TodoState) => {
+            state.loading = true;
+        },
         todosLoaded: (state: TodoState, list: Todo[]) => {
             state.todos = list.reduce((acc, todo) => {
                 return {
@@ -30,10 +36,13 @@ export default new Vuex.Store({
                     [todo.id]: todo
                 };
             }, {});
+            state.loading = false;
         }
     },
+    // asynchronous actions here
     actions: {
-        fetch({ commit }) {
+        fetchTodos({ commit }) {
+            commit('todosStartLoading');
             TodoService.getAll().then(list => {
                 commit('todosLoaded', list);
             });

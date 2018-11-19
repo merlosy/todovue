@@ -11,7 +11,7 @@ export class TodoService {
 
     private static http(): AxiosInstance {
         return axios.create({
-            baseURL: `http:localhost:2403/todos`,
+            baseURL: `http://localhost:2403/todos`,
             withCredentials: false,
             headers: {
                 'Accept': 'application/json',

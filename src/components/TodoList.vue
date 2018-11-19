@@ -1,6 +1,6 @@
 <template>
   <ul>
-      <li v-for="todo in todos" :key="todo.id">
+      <li v-for="todo in selectTodos" :key="todo.id">
           <span>{{todo.id}}</span>
       </li>
   </ul>
@@ -8,12 +8,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
+import { mapGetters, mapActions } from "vuex";
 
-@Component
+@Component({
+  computed: {
+    ...mapGetters(["selectTodos"])
+  },
+  methods: {
+    ...mapActions([
+      "fetchTodos" // map `this.fetchTodos()` to `this.$store.dispatch('fetchTodos')`
+    ])
+  }
+})
 export default class TodoList extends Vue {
   public created() {
-    console.log("createdTodoList");
+    this.fetchTodos();
   }
 }
 </script>

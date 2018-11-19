@@ -1,7 +1,7 @@
 <template>
   <ul>
       <li v-for="todo in selectTodos" :key="todo.id">
-          <span>{{todo.id}}</span>
+          <span>{{todo.id}} {{todo.title}}</span>
       </li>
   </ul>
 
